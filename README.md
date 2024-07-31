@@ -145,11 +145,12 @@ delete secret successful, secret id: <secret_id>
 ## 3 Attest
 ### 3.1 get token 
 ```shell
-./tcasctl attest-token -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids>
+./tcasctl attest token -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids> -v <trust-devices>
 ```
 + `-t`: must, the type of tee, now support csv or virtcca
 + `-d`: optional, the base64 encoded userdata
 + `-p`: optional, the ids of the policy needed matching
++ `-v`: optional, the trust devices
 
 successful response:
 ```shell
@@ -158,11 +159,12 @@ successful response:
 
 ### 3.2 get secret 
 ```shell
-./tcasctl attest-secret -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids>
+./tcasctl attest secret -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids> -v <trust-devices>
 ```
 + `-t`: must, the type of tee, now support csv or virtcca
 + `-d`: optional, the base64 encoded userdata
 + `-p`: optional, the ids of the policy needed matching 
++ `-v`: optional, the trust devices
 
 successful response:
 ```shell
@@ -171,10 +173,11 @@ successful response:
 
 ### 3.3 get cert  
 ```shell 
-./tcasctl attest-cert -u <url> -t <tee> -p <policy ids> -k <publickey file> -c <common_name> -e <expiration> -i <ipaddresses> -o <output dir>
+./tcasctl attest cert -u <url> -t <tee> -p <policy ids>  -v <trust-devices> -k <publickey file> -c <common_name> -e <expiration> -i <ipaddresses> -o <output dir> 
 ```
 + `-t`: must, the type of tee, now support csv or virtcca
 + `-p`: optional, the ids of the policy needed matching 
++ `-v`: optional, the trust devices
 + `-k`: optional, the ecc256 of publickey in pem format, if not present, will generate key pair randomly 
 + `-c`: must, the cert's common_name 
 + `-e`: optional, the cert's expiration time, default: 10 years
@@ -195,7 +198,7 @@ get cert successful, the <publickey.pem> <privatekey.pem> <serial_number_common_
 
 ### 4.2 verify token
 ```shell
-./tcasclt verify-token -t <token>
+./tcasclt verify token -t <token>
 ```
 successful response
 ```shell
@@ -205,7 +208,7 @@ verify token successful, the detail info of the token is as follow:
 
 ### 4.3 verify cert
 ```shell
-./tcasectl verfiy-cert -u <url> -f <the path of the cert> 
+./tcasectl verfiy cert -u <url> -f <the path of the cert> 
 ```
 `-f`: must, the path of the cert to be verified
 
