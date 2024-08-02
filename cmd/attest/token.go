@@ -1,7 +1,10 @@
 package attest
 
 import (
+	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"tcas-cli/manager"
 )
 
 var tokenCmd = &cobra.Command{
@@ -9,6 +12,23 @@ var tokenCmd = &cobra.Command{
 	Short: "attest for getting token",
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
+		url, _ := cmd.Flags().GetString("url")
+		tee, _ := cmd.Flags().GetString("tee")
+		devices, _ := cmd.Flags().GetString("devices")
+		userdata, _ := cmd.Flags().GetString("userdata")
+		policies, _ := cmd.Flags().GetString("policies")
+
+		m, err := manager.New(url, "")
+		if err != nil {
+			return
+		}
+		res, err := m.AttestForToken(tee, userdata, devices, policies)
+		if err != nil {
+			logrus.Errorf("do attest for token failed, error: %s", err)
+			return
+		}
+
+		fmt.Println(res.Token)
 	},
 }
 

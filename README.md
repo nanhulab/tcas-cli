@@ -216,3 +216,6 @@ successful response:
 ```shell
 <the path of the cert> verify successful 
 ```
+
+## reference
++ https://github.com/edgelesssys/go-tdx-qpl/blob/main/tdx/tdx_linux.go
