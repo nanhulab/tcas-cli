@@ -1,10 +1,12 @@
 package vcca
 
-import "tcas-cli/manager"
+import (
+	"tcas-cli/collectors"
+)
 
 type Collector struct {
 }
 
-func (c *Collector) CollectEvidence(userdata []byte) (*manager.Evidence, error) {
+func (c *Collector) CollectEvidence(userdata []byte) (*collectors.Evidence, error) {
 	return nil, nil
 }

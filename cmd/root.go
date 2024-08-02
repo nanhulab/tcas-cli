@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"os"
 	"tcas-cli/cmd/attest"
@@ -20,6 +22,21 @@ var RootCmd = &cobra.Command{
 }
 
 func Execute() {
+	loglevel := os.Getenv("LogLevel")
+	if loglevel != "" {
+		level, err := logrus.ParseLevel(loglevel)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to parse logging level: %s\n", loglevel)
+			os.Exit(1)
+		}
+		logrus.SetLevel(level)
+	}
+
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableTimestamp:       true,
+		DisableLevelTruncation: true,
+	})
+
 	RootCmd.AddCommand(attest.Cmd)
 	RootCmd.AddCommand(policy.Cmd)
 	RootCmd.AddCommand(secret.Cmd)
