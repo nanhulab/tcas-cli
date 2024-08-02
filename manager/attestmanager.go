@@ -1,3 +1,11 @@
+/*
+ * @Author: jffan
+ * @Date: 2024-07-31 15:01:17
+ * @LastEditTime: 2024-08-02 17:09:18
+ * @LastEditors: jffan
+ * @FilePath: \gitee-tcas\manager\attestmanager.go
+ * @Description: 🎉🎉🎉
+ */
 package manager
 
 import (
@@ -5,12 +13,13 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"github.com/beego/beego/v2/client/httplib"
-	"github.com/sirupsen/logrus"
 	"os"
 	"strings"
 	"tcas-cli/collectors"
 	"tcas-cli/tees"
+
+	"github.com/beego/beego/v2/client/httplib"
+	"github.com/sirupsen/logrus"
 )
 
 type Manager struct {
@@ -79,13 +88,69 @@ func (m *Manager) SetPolicy(name, policy, attestationType string) (*PolicySetRes
 	res := new(PolicySetResponse)
 	err = client.ToJSON(res)
 	if err != nil {
-		errMesg := fmt.Sprintf("requst set policy api failed, , error: %s ", err)
-		return nil, fmt.Errorf(errMesg)
+		return nil, fmt.Errorf("request set policy api failed, error: %s ", err)
+	}
+
+	return res, nil
+}
+func (m *Manager) ListPolicy(attestationType string) (*PolicyListResponse, error) {
+	if attestationType == "" {
+		attestationType = "trust_node"
+		fmt.Println("attestationType is null, use default value: `trust_node`")
+	}
+	client := m.newClient("get", PolicyUrl)
+	client.Param("attestation", attestationType)
+	res := new(PolicyListResponse)
+	err := client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request policy list failed, error: %s ", err)
+	}
+	return res, nil
+}
+func (m *Manager) DeletePolicy(policyID string) (*PolicyDeleteResponse, error) {
+	if policyID == "" {
+		return nil, fmt.Errorf("policyID is null")
+	}
+	deleteURL := PolicyUrl + "/" + policyID
+	client := m.newClient("delete", deleteURL)
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
+	}
+	res := new(PolicyDeleteResponse)
+
+	err := client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request delete policy api failed,error: %s ", err)
 	}
 
 	return res, nil
 }
 
+func (m *Manager) ListSecret() (*SecretListResponse, error) {
+	client := m.newClient("get", SecretListUrl)
+	res := new(SecretListResponse)
+	err := client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request secret list failed, error: %s ", err)
+	}
+	return res, nil
+}
+
+func (m *Manager) DeleteSecret(secretID string) (*SecretDeleteResponse, error) {
+	deleteSecretURL := SecretUrl + "/" + secretID
+	client := m.newClient("delete", deleteSecretURL)
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
+	}
+	res := new(SecretDeleteResponse)
+
+	err := client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request delete secret api failed,error: %s ", err)
+	}
+
+	return res, nil
+}
 func (m *Manager) GetNonce() (*NonceResponse, error) {
 	client := m.newClient("get", NonceUrl)
 	res := new(NonceResponse)

@@ -100,7 +100,7 @@ set secret successful, secret id: <secret_id>
 
 ### 2.2 update secret 
 ```shell
-./tcasctl secret upddate -u <url> -f <new secret file> -i <secret id> 
+./tcasctl secret update -u <url> -f <new secret file> -i <secret id> 
 ```
 
 + `-f`: must, the path of new secret file, only support json format.

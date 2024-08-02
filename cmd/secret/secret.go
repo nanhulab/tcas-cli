@@ -1,21 +1,23 @@
+/*
+ * @Author: jffan
+ * @Date: 2024-07-31 15:01:17
+ * @LastEditTime: 2024-08-02 15:00:48
+ * @LastEditors: jffan
+ * @FilePath: \gitee-tcas\cmd\secret\secret.go
+ * @Description: 🎉🎉🎉
+ */
 package secret
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
 // secretCmd represents the secret command
 var Cmd = &cobra.Command{
-	Use:   "secret",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("secret called")
-	},
+	Args:                       cobra.NoArgs,
+	Use:                        "secret",
+	Short:                      "manager secret",
+	Long:                       "",
+	SuggestionsMinimumDistance: 1,
+	DisableSuggestions:         false,
 }
