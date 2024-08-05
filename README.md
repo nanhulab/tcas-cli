@@ -152,6 +152,8 @@ delete secret successful, secret id: <secret_id>
 + `-p`: optional, the ids of the policy needed matching
 + `-v`: optional, the trust devices
 
+eg: ./tcasctl attest token -u http://127.0.0.1:8081 -t virtcca -d MTIzYWJj 
+
 successful response:
 ```shell
 <token>

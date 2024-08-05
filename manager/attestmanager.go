@@ -179,7 +179,7 @@ func (m *Manager) getNodeAttestInfo(tee, runtimedata, devices, policies string) 
 	logrus.Debugf("nonce is %s", nonceRes.Data.Nonce)
 	userdata := fmt.Sprintf("%x", sha256.Sum256([]byte(nonceRes.Data.Nonce+runtimedata)))
 
-	c, ok := m.Collectors["csv"]
+	c, ok := m.Collectors[tee]
 	if !ok {
 		return nil, fmt.Errorf("tee: %s not support yet", tee)
 	}
