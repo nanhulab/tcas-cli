@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-30 14:23:59
- * @LastEditTime: 2024-07-30 14:29:31
+ * @LastEditTime: 2024-08-06 15:03:51
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\utils\file\file.go
- * @Description: 🎉🎉🎉
+ * @FilePath: \gitee-tcas\utils\file\file.go
+ * @Description:
  */
 package file
 
@@ -55,4 +55,19 @@ func FileToBase64(filePath string) (string, error) {
 	}
 	base64Encoded := base64.StdEncoding.EncodeToString(fileBytes)
 	return base64Encoded, nil
+}
+
+// Determine whether the directory exists, and if it does not exist, create it
+func EnsureDirExists(dirPath string) error {
+	_, err := os.Stat(dirPath)
+	if os.IsNotExist(err) {
+		// Create a directory if it doesn't exist
+		err = os.MkdirAll(dirPath, 0755)
+		if err != nil {
+			return fmt.Errorf("error creating directory: %v", err)
+		}
+	} else if err != nil {
+		return fmt.Errorf("error checking directory: %v", err)
+	}
+	return nil
 }

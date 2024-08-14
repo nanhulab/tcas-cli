@@ -1,14 +1,15 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 14:18:43
- * @LastEditTime: 2024-08-02 16:56:05
+ * @LastEditTime: 2024-08-13 10:57:13
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\set.go
- * @Description: 🎉🎉🎉
+ * @Description: set policy
  */
 package policy
 
 import (
+	"fmt"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
 	"tcas-cli/utils/file"
@@ -48,9 +49,9 @@ var policySetCmd = &cobra.Command{
 			logrus.Debugf("There is no name set So We generate a policy name (" + consts.ColorYellow + name + consts.OutReset + ") for you! ")
 		}
 		url, _ := cmd.Flags().GetString("url")
-		logrus.Debugf("policy url:" + consts.ColorYellow + url + consts.OutReset)
+		logrus.Debugf("policy set url:" + consts.ColorYellow + url + consts.OutReset)
 		attestationType, _ := cmd.Flags().GetString("type")
-		logrus.Debugf("policy type:" + consts.ColorYellow + attestationType + consts.OutReset)
+		logrus.Debugf("policy set type:" + consts.ColorYellow + attestationType + consts.OutReset)
 
 		m, err := manager.New(url, "")
 		if err != nil {
@@ -59,9 +60,10 @@ var policySetCmd = &cobra.Command{
 		res, err := m.SetPolicy(name, fileBase64, attestationType)
 		if err != nil {
 			logrus.Errorf("Request failed: %v", err)
+			return
 		}
 		if res.Code == 200 {
-			logrus.Debugf(consts.ColorGreen + "set policy successful, policy id: " + res.PolicyID + consts.OutReset)
+			fmt.Println(consts.ColorGreen + "set policy successful, policy id: " + res.PolicyID + consts.OutReset)
 		} else {
 			logrus.Errorf(consts.ColorRed + "set policy failed:" + res.Message + consts.OutReset)
 		}

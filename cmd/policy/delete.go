@@ -1,14 +1,15 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 14:46:14
- * @LastEditTime: 2024-08-02 17:02:49
+ * @LastEditTime: 2024-08-13 10:56:45
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\delete.go
- * @Description: 🎉🎉🎉
+ * @Description: delete policy
  */
 package policy
 
 import (
+	"fmt"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
 
@@ -33,13 +34,15 @@ var policyDeleteCmd = &cobra.Command{
 		m, err := manager.New(url, "")
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
+			return
 		}
 		res, err := m.DeletePolicy(ploicyId)
 		if err != nil {
 			logrus.Errorf("Request failed: %v", err)
+			return
 		}
 		if res.Code == 200 {
-			logrus.Debugf(consts.ColorGreen + "delete policy successful, the policy id is " + res.PolicyID + consts.OutReset)
+			fmt.Println(consts.ColorGreen + "delete policy successful, the policy id is " + res.PolicyID + consts.OutReset)
 		} else {
 			logrus.Errorf(consts.ColorRed + "delete policy failed:" + res.Message + consts.OutReset)
 		}

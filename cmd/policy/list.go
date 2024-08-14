@@ -1,15 +1,16 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 16:34:14
- * @LastEditTime: 2024-08-02 17:03:47
+ * @LastEditTime: 2024-08-13 10:54:37
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\list.go
- * @Description: 🎉🎉🎉
+ * @Description: get policy list
  */
 package policy
 
 import (
 	"encoding/json"
+	"fmt"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
 
@@ -31,19 +32,22 @@ var policyListCmd = &cobra.Command{
 		m, err := manager.New(url, "")
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
+			return
 		}
 		res, err := m.ListPolicy(attestationType)
 		if err != nil {
 			logrus.Errorf("Request policy list failed: %v", err)
+			return
 		}
 		if res.Code == 200 {
 			jsonData, err := json.MarshalIndent(manager.PolicyListJsonFormat{Policies: res.Data}, "", "  ")
 			if err != nil {
 				logrus.Errorf("Error marshaling JSON:", err)
+				return
 			} else {
-				logrus.Debugf("------------------policy list start------------------")
-				logrus.Debugf(consts.ColorYellow + string(jsonData) + consts.OutReset)
-				logrus.Debugf("------------------policy list end--------------------")
+				fmt.Println("------------------policy list start------------------")
+				fmt.Println(consts.ColorYellow + string(jsonData) + consts.OutReset)
+				fmt.Println("------------------policy list end--------------------")
 			}
 		} else {
 			logrus.Errorf(consts.ColorRed + "request policy list failed:" + res.Message + consts.OutReset)

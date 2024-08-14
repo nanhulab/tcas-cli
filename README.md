@@ -200,9 +200,13 @@ get cert successful, the <publickey.pem> <privatekey.pem> <serial_number_common_
 
 ### 4.2 verify token
 ```shell
-./tcasclt verify token -t <token>
+./tcasclt verify token -t <token> -f <the path of the cert>
 ```
+- `-t`:must,tcas's token
+- `-f`:optionally, the path of the CA certificate. If not, it will be verified online
+
 successful response
+
 ```shell
 verify token successful, the detail info of the token is as follow:
 <token claims>

@@ -1,24 +1,31 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-02 17:09:18
+ * @LastEditTime: 2024-08-14 16:40:23
  * @LastEditors: jffan
- * @FilePath: \gitee-tcas\manager\attestmanager.go
- * @Description: 🎉🎉🎉
+ * @FilePath: \tcas-cli\manager\attestmanager.go
+ * @Description: Request encapsulation
  */
 package manager
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/base64"
+	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"os"
 	"strings"
 	"tcas-cli/collectors"
+	consts "tcas-cli/constants"
 	"tcas-cli/tees"
+	"time"
 
 	"github.com/beego/beego/v2/client/httplib"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -79,7 +86,6 @@ func (m *Manager) SetPolicy(name, policy, attestationType string) (*PolicySetRes
 		AttestationType: attestationType,
 	}
 
-	fmt.Println(req)
 	client, err := client.JSONBody(req)
 	if err != nil {
 		return nil, err
@@ -151,6 +157,21 @@ func (m *Manager) DeleteSecret(secretID string) (*SecretDeleteResponse, error) {
 
 	return res, nil
 }
+
+func (m *Manager) GetRootCert() (*CaResponse, error) {
+	client := m.newClient("get", CaUrl)
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
+	}
+	res := new(CaResponse)
+	err := client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request ca cert failed, error: %s", err)
+	}
+
+	return res, nil
+}
+
 func (m *Manager) GetNonce() (*NonceResponse, error) {
 	client := m.newClient("get", NonceUrl)
 	res := new(NonceResponse)
@@ -250,4 +271,67 @@ func (m *Manager) AttestForToken(tee, runtimedata, devices, policies string) (*T
 	}
 
 	return tokenRes, nil
+}
+
+func X5cToCertPem(x5c []string) (*bytes.Buffer, error) {
+	var pemData *bytes.Buffer
+	if x5c != nil && len(x5c) > 0 {
+		for _, x5c := range x5c {
+			certBytes, err := base64.StdEncoding.DecodeString(x5c)
+			if err != nil {
+				return pemData, fmt.Errorf("failed to decode base64 certificate: %s\n", err)
+			}
+			block := &pem.Block{
+				Type:  "CERTIFICATE",
+				Bytes: []byte(certBytes),
+			}
+			tempData := pem.EncodeToMemory(block)
+			pemData.Write(tempData)
+		}
+		return pemData, nil
+	}
+	return pemData, fmt.Errorf("x5c is null")
+}
+
+func ParseTokenByPk(publicKey any, tokenString string) (*jwt.Token, error) {
+	logrus.Debugf("ca publicKey: %v", publicKey)
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return publicKey, nil
+	})
+	if err != nil {
+		return nil, fmt.Errorf("Token validation failed: %v", err)
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if exp, ok := claims["exp"].(float64); ok {
+			now := time.Now().Unix()
+			if int64(exp) < now {
+				return nil, fmt.Errorf("Token expired")
+			}
+		} else {
+			return nil, fmt.Errorf("Expiration time claim 'exp' missing")
+		}
+	} else {
+		return nil, fmt.Errorf("Invalid token")
+	}
+	return token, nil
+}
+
+func PrintFormatToken(token *jwt.Token) error {
+	jsonHeaderData, err := json.MarshalIndent(token.Header, "", "  ")
+	if err != nil {
+		return fmt.Errorf("Marshal token header failed: %v", err)
+	}
+	fmt.Println("------------------Token Info Start------------------")
+	fmt.Println(consts.ColorYellow + string(jsonHeaderData) + consts.OutReset)
+	jsonClaimsData, err := json.MarshalIndent(token.Claims, "", "  ")
+	if err != nil {
+		fmt.Println("------------------Token Info End--------------------")
+		return fmt.Errorf("Marshal token Claims failed: %v", err)
+	}
+	fmt.Println(consts.ColorYellow + string(jsonClaimsData) + consts.OutReset)
+	fmt.Println("------------------Token Info End--------------------")
+	return nil
 }

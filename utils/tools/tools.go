@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-07-31 14:42:15
  * @LastEditors: jffan
  * @FilePath: \tcas-gitee\utils\tools\tools.go
- * @Description: 🎉🎉🎉
+ * @Description: Some utility functions
  */
 package tools
 

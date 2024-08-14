@@ -1,14 +1,15 @@
 /*
  * @Author: jffan
  * @Date: 2024-08-01 15:47:27
- * @LastEditTime: 2024-08-02 17:05:15
+ * @LastEditTime: 2024-08-14 14:36:14
  * @LastEditors: jffan
- * @FilePath: \gitee-tcas\cmd\secret\delete.go
- * @Description: 🎉🎉🎉
+ * @FilePath: \tcas-cli\cmd\secret\delete.go
+ * @Description: delete secret
  */
 package secret
 
 import (
+	"fmt"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
 
@@ -32,13 +33,15 @@ var secretDeleteCmd = &cobra.Command{
 		m, err := manager.New(url, "")
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
+			return
 		}
 		res, err := m.DeleteSecret(secretID)
 		if err != nil {
 			logrus.Errorf("Request failed: %v", err)
+			return
 		}
 		if res.Code == 200 {
-			logrus.Debugf(consts.ColorGreen + "delete secret successful, secret id: " + res.SecretID + consts.OutReset)
+			fmt.Println(consts.ColorGreen + "delete secret successful, secret id: " + res.SecretID + consts.OutReset)
 		} else {
 			logrus.Errorf(consts.ColorRed + "delete secret failed:" + res.Message + consts.OutReset)
 		}

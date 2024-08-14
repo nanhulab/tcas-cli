@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-02 15:33:34
+ * @LastEditTime: 2024-08-14 14:32:49
  * @LastEditors: jffan
- * @FilePath: \gitee-tcas\manager\response.go
- * @Description: 🎉🎉🎉
+ * @FilePath: \tcas-cli\manager\response.go
+ * @Description: The type of request returned
  */
 package manager
 
@@ -78,4 +78,18 @@ type NonceResponse struct {
 type TokenResponse struct {
 	HttpBaseResponse
 	Token string `json:"token"`
+}
+
+type CaSingleResponse struct {
+	Alg string   `json:"alg"`
+	Crv string   `json:"crv"`
+	Kid string   `json:"kid"`
+	Kty string   `json:"kty"`
+	X   string   `json:"x"`
+	X5c []string `json:"x5c"`
+	Y   string   `json:"y"`
+}
+
+type CaResponse struct {
+	Keys []CaSingleResponse `json:"keys"`
 }

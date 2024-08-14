@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-08-02 17:01:31
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\secret\set.go
- * @Description: 🎉🎉🎉
+ * @Description: set secret
  */
 package secret
 
@@ -18,7 +18,7 @@ var secretSetCmd = &cobra.Command{
 	Short: "set secret",
 	Long:  `set secret`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Debugf("secret set called")
+		logrus.Infof("secret set called")
 	},
 }
 

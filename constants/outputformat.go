@@ -1,10 +1,10 @@
 /*
  * @Author: fanjf
  * @Date: 2024-07-26 11:01:16
- * @LastEditTime: 2024-07-26 11:17:47
- * @LastEditors: fanjf
+ * @LastEditTime: 2024-08-14 14:31:05
+ * @LastEditors: jffan
  * @FilePath: \tcas-cli\constants\outputformat.go
- * @Description: 🎉🎉🎉
+ * @Description: Format the output constant
  */
 package constants
 

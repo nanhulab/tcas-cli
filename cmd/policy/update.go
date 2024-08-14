@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 16:41:04
- * @LastEditTime: 2024-08-02 16:57:13
+ * @LastEditTime: 2024-08-06 16:10:50
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\update.go
- * @Description: 🎉🎉🎉
+ * @Description: update policy
  */
 package policy
 
@@ -18,7 +18,7 @@ var policyUpdateCmd = &cobra.Command{
 	Short: "update policy",
 	Long:  `update policy`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Debugf("policy update called")
+		logrus.Infof("policy update called")
 	},
 }
 

@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-29 09:48:09
- * @LastEditTime: 2024-07-30 16:53:42
+ * @LastEditTime: 2024-08-14 14:30:04
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\cmd\policy.go
- * @Description: Copyright © 2024 <jffan@nanhulab.ac.cn>
+ * @FilePath: \tcas-cli\cmd\policy\policy.go
+ * @Description:
  */
 package policy
 

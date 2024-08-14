@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-08-01 15:18:37
- * @LastEditTime: 2024-08-02 17:01:52
+ * @LastEditTime: 2024-08-14 14:35:46
  * @LastEditors: jffan
- * @FilePath: \gitee-tcas\cmd\secret\update.go
- * @Description: 🎉🎉🎉
+ * @FilePath: \tcas-cli\cmd\secret\update.go
+ * @Description: update secret
  */
 package secret
 
@@ -18,7 +18,7 @@ var secretUpdateCmd = &cobra.Command{
 	Short: "update secret",
 	Long:  `update secret`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Debugf("secret update called ")
+		logrus.Infof("secret update called ")
 	},
 }
 

@@ -1,15 +1,16 @@
 /*
  * @Author: jffan
  * @Date: 2024-08-01 15:36:12
- * @LastEditTime: 2024-08-02 17:00:39
+ * @LastEditTime: 2024-08-13 10:53:43
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\secret\list.go
- * @Description: 🎉🎉🎉
+ * @Description: get the secret base info list
  */
 package secret
 
 import (
 	"encoding/json"
+	"fmt"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
 
@@ -27,19 +28,22 @@ var secretListCmd = &cobra.Command{
 		m, err := manager.New(url, "")
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
+			return
 		}
 		res, err := m.ListSecret()
 		if err != nil {
 			logrus.Errorf("Request secret list failed: %v", err)
+			return
 		}
 		if res.Code == 200 {
 			jsonData, err := json.MarshalIndent(manager.SecretListJsonFormat{Secrets: res.Data}, "", "  ")
 			if err != nil {
 				logrus.Errorf("Error marshaling JSON:", err)
+				return
 			} else {
-				logrus.Debugf("------------------secret list start------------------")
-				logrus.Debugf(consts.ColorYellow + string(jsonData) + consts.OutReset)
-				logrus.Debugf("------------------secret list end--------------------")
+				fmt.Println("------------------secret list start------------------")
+				fmt.Println(consts.ColorYellow + string(jsonData) + consts.OutReset)
+				fmt.Println("------------------secret list end--------------------")
 			}
 		} else {
 			logrus.Errorf(consts.ColorRed + "request secret list failed:" + res.Message + consts.OutReset)

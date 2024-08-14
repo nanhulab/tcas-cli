@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-08-02 16:56:48
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\detail.go
- * @Description: 🎉🎉🎉
+ * @Description: get the detail of the policy
  */
 package policy
 
@@ -18,7 +18,7 @@ var policyDetailCmd = &cobra.Command{
 	Short: "get the detail of the policy",
 	Long:  `get the detail of the policy`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Debugf("policy detail called")
+		logrus.Infof("policy detail called")
 	},
 }
 
