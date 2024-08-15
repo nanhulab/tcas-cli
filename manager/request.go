@@ -1,9 +1,27 @@
+/*
+ * @Author: jffan
+ * @Date: 2024-08-15 09:16:45
+ * @LastEditTime: 2024-08-15 10:56:35
+ * @LastEditors: jffan
+ * @FilePath: \gitee-tcas\manager\request.go
+ * @Description: The type of request params
+ */
 package manager
 
 type SetPolicyReq struct {
 	Name            string `json:"policy_name"`
 	Policy          string `json:"policy_rego"`
 	AttestationType string `json:"attestation_type"`
+}
+
+type SetSecretReq struct {
+	Name   string `json:"name"`
+	Secret string `json:"secret"`
+}
+
+type UpdateSecretReq struct {
+	Id     string `json:"id"`
+	Secret string `json:"secret"`
 }
 
 type TrustDeviceReport struct {

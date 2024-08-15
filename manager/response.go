@@ -1,10 +1,10 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-14 14:32:49
+ * @LastEditTime: 2024-08-15 09:27:06
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\manager\response.go
- * @Description: The type of request returned
+ * @FilePath: \gitee-tcas\manager\response.go
+ * @Description: The type of response params
  */
 package manager
 
@@ -44,6 +44,11 @@ type PolicyListResponse struct {
 
 type PolicyListJsonFormat struct {
 	Policies []PolicyListResData `json:"policies"`
+}
+
+type SecretSetResponse struct {
+	HttpBaseResponse
+	Id string `json:"id"`
 }
 
 type SecretListResData struct {
