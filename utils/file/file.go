@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-30 14:23:59
- * @LastEditTime: 2024-08-06 15:03:51
+ * @LastEditTime: 2024-08-15 09:24:19
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\utils\file\file.go
  * @Description:
@@ -10,6 +10,7 @@ package file
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -70,4 +71,23 @@ func EnsureDirExists(dirPath string) error {
 		return fmt.Errorf("error checking directory: %v", err)
 	}
 	return nil
+}
+
+// read json file
+func ReadJSONFile(filePath string) (json.RawMessage, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("opening file failed: %w", err)
+	}
+	defer file.Close()
+	fileData, err := io.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("reading file failed: %w", err)
+	}
+	var jsonRawData json.RawMessage
+	err = json.Unmarshal(fileData, &jsonRawData)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling json failed: %w", err)
+	}
+	return fileData, nil
 }

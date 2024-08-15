@@ -1,9 +1,9 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-14 16:40:23
+ * @LastEditTime: 2024-08-15 10:56:47
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\manager\attestmanager.go
+ * @FilePath: \gitee-tcas\manager\attestmanager.go
  * @Description: Request encapsulation
  */
 package manager
@@ -131,7 +131,57 @@ func (m *Manager) DeletePolicy(policyID string) (*PolicyDeleteResponse, error) {
 
 	return res, nil
 }
+func (m *Manager) SetSecret(name, encodeJsonData string) (*SecretSetResponse, error) {
+	if name == "" || encodeJsonData == "" {
+		return nil, fmt.Errorf("secret name or jsonData is null")
+	}
+	client := m.newClient("post", SecretUrl)
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
+	}
+	req := SetSecretReq{
+		Name:   name,
+		Secret: encodeJsonData,
+	}
 
+	client, err := client.JSONBody(req)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(SecretSetResponse)
+	err = client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request set secret api failed, error: %s ", err)
+	}
+
+	return res, nil
+}
+func (m *Manager) UpdateSecret(id, encodeJsonData string) (*SecretSetResponse, error) {
+	if id == "" || encodeJsonData == "" {
+		return nil, fmt.Errorf("secret id or jsonData is null")
+	}
+	client := m.newClient("put", SecretUrl)
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
+	}
+	req := UpdateSecretReq{
+		Id:     id,
+		Secret: encodeJsonData,
+	}
+	client, err := client.JSONBody(req)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(SecretSetResponse)
+	err = client.ToJSON(res)
+	if err != nil {
+		return nil, fmt.Errorf("request update secret api failed, error: %s ", err)
+	}
+
+	return nil, nil
+}
 func (m *Manager) ListSecret() (*SecretListResponse, error) {
 	client := m.newClient("get", SecretListUrl)
 	res := new(SecretListResponse)

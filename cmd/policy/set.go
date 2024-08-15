@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 14:18:43
- * @LastEditTime: 2024-08-13 10:57:13
+ * @LastEditTime: 2024-08-15 09:36:55
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\policy\set.go
  * @Description: set policy
@@ -56,6 +56,7 @@ var policySetCmd = &cobra.Command{
 		m, err := manager.New(url, "")
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
+			return
 		}
 		res, err := m.SetPolicy(name, fileBase64, attestationType)
 		if err != nil {
