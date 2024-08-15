@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-15 10:56:47
+ * @LastEditTime: 2024-08-15 16:23:48
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\attestmanager.go
  * @Description: Request encapsulation
@@ -324,7 +324,7 @@ func (m *Manager) AttestForToken(tee, runtimedata, devices, policies string) (*T
 }
 
 func X5cToCertPem(x5c []string) (*bytes.Buffer, error) {
-	var pemData *bytes.Buffer
+	pemData := new(bytes.Buffer)
 	if x5c != nil && len(x5c) > 0 {
 		for _, x5c := range x5c {
 			certBytes, err := base64.StdEncoding.DecodeString(x5c)
