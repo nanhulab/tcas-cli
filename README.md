@@ -175,10 +175,10 @@ successful response:
 
 ### 3.3 get cert  
 ```shell 
-./tcasctl attest cert -u <url> -t <tee> -p <policy ids>  -v <trust-devices> -k <publickey file> -c <common_name> -e <expiration> -i <ipaddresses> -o <output dir> 
+./tcasctl attest cert -u <url> -t <tee> -p <policy ids> -v <trust-devices> -k <publickey file> -c <common_name> -e <expiration> -i <ipaddresses> -o <output dir> 
 ```
 + `-t`: must, the type of tee, now support csv or virtcca
-+ `-p`: optional, the ids of the policy needed matching 
++ `-p`: optional, the ids of the policy needed matching
 + `-v`: optional, the trust devices
 + `-k`: optional, the ecc256 of publickey in pem format, if not present, will generate key pair randomly 
 + `-c`: must, the cert's common_name 
@@ -214,9 +214,11 @@ verify token successful, the detail info of the token is as follow:
 
 ### 4.3 verify cert
 ```shell
-./tcasectl verfiy cert -u <url> -f <the path of the cert> 
+./tcasectl verfiy cert -u <url> -f <the path of the cert> -c <the path of the ca cert>
 ```
 `-f`: must, the path of the cert to be verified
+
+`-c`: optional, the path of the CA certificate file.If not, the CA certificate will be automatically obtained
 
 successful response:
 ```shell

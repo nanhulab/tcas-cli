@@ -1,9 +1,9 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-14 14:33:15
+ * @LastEditTime: 2024-08-16 15:35:24
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\manager\urls.go
+ * @FilePath: \gitee-tcas\manager\urls.go
  * @Description: Define the constant for the request
  */
 package manager
@@ -17,4 +17,5 @@ const (
 	NonceUrl          = "/v1/nonce"
 	AttestUrl         = "/v1/attest"
 	CaUrl             = "/v1/pki/ca"
+	AttestCertUrl     = "/v1/attest/getcert"
 )

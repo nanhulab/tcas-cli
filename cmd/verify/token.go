@@ -1,9 +1,9 @@
 /*
  * @Author: jffan
  * @Date: 2024-08-09 09:29:01
- * @LastEditTime: 2024-08-14 16:37:52
+ * @LastEditTime: 2024-08-20 11:02:55
  * @LastEditors: jffan
- * @FilePath: \tcas-cli\cmd\verify\token.go
+ * @FilePath: \gitee-tcas\cmd\verify\token.go
  * @Description: The CA certificate is used to verify the token, which is divided into online verification and local verification
  */
 package verify
@@ -12,8 +12,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
-	"encoding/pem"
-	"os"
+	"fmt"
 	"strings"
 	consts "tcas-cli/constants"
 	"tcas-cli/manager"
@@ -34,6 +33,8 @@ var verifyTokenCmd = &cobra.Command{
 	Short: "verify token",
 	Long:  `verify token`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var caCert *x509.Certificate
+		var err error
 		tokenString, _ := cmd.Flags().GetString("token")
 		caFilePath, _ := cmd.Flags().GetString("file")
 		if caFilePath == "" {
@@ -58,7 +59,7 @@ var verifyTokenCmd = &cobra.Command{
 				return
 			}
 			var headerToken TokenHeader
-			if err := json.Unmarshal(header, &headerToken); err != nil {
+			if err = json.Unmarshal(header, &headerToken); err != nil {
 				logrus.Errorf(consts.ColorRed+"Unmarshalling header failed:%v"+consts.OutReset, err)
 				return
 			}
@@ -69,64 +70,35 @@ var verifyTokenCmd = &cobra.Command{
 						logrus.Errorf(err.Error())
 						return
 					}
-					block, _ := pem.Decode(pemData.Bytes())
-					if block == nil {
-						logrus.Errorf("Failed to decode PEM block containing the CA certificate")
-						return
-					}
-					caCert, err := x509.ParseCertificate(block.Bytes)
-					if err != nil {
-						logrus.Errorf("Failed to parse CA certificate: %v", err)
-						return
-					}
-					publicKey := caCert.PublicKey
-					token, err := manager.ParseTokenByPk(publicKey, tokenString)
+					caCert, err = manager.ParseCert(pemData.Bytes())
 					if err != nil {
 						logrus.Errorf(err.Error())
 						return
 					}
-					logrus.Infof(consts.ColorGreen + "Verify token successful" + consts.OutReset)
-					err = manager.PrintFormatToken(token)
-					if err != nil {
-						logrus.Errorf(err.Error())
-						return
-					}
-					return
 				}
 			}
-			logrus.Errorf(consts.ColorRed + "Verify Token Failed" + consts.OutReset)
 		} else {
 			//local verify
 			logrus.Debugf(consts.ColorYellow + "Verify Token Local" + consts.OutReset)
-			caCertPEM, err := os.ReadFile(caFilePath)
-			if err != nil {
-				logrus.Errorf("read ca file failed, error: %s", err)
-				return
-			}
-			block, _ := pem.Decode(caCertPEM)
-			if block == nil {
-				logrus.Errorf("Failed to decode PEM block containing the CA certificate")
-				return
-			}
-			caCert, err := x509.ParseCertificate(block.Bytes)
-			if err != nil {
-				logrus.Errorf("Failed to parse CA certificate: %v", err)
-				return
-			}
-			publicKey := caCert.PublicKey
-			token, err := manager.ParseTokenByPk(publicKey, tokenString)
-			if err != nil {
-				logrus.Errorf(err.Error())
-				return
-			}
-			logrus.Infof(consts.ColorGreen + "Verify token successful" + consts.OutReset)
-			err = manager.PrintFormatToken(token)
+			caCert, err = manager.ParseCert(caFilePath)
 			if err != nil {
 				logrus.Errorf(err.Error())
 				return
 			}
 		}
-
+		publicKey := caCert.PublicKey
+		token, err := manager.ParseTokenByPk(publicKey, tokenString)
+		if err != nil {
+			fmt.Println(consts.ColorRed + "Verify Token Failed" + consts.OutReset)
+			logrus.Errorf(err.Error())
+			return
+		}
+		fmt.Println(consts.ColorGreen + "Verify token successful" + consts.OutReset)
+		err = manager.PrintFormatToken(token)
+		if err != nil {
+			logrus.Errorf(err.Error())
+			return
+		}
 	},
 }
 

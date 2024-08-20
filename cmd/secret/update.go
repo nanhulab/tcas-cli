@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-08-01 15:18:37
- * @LastEditTime: 2024-08-15 11:12:32
+ * @LastEditTime: 2024-08-15 16:36:47
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\cmd\secret\update.go
  * @Description: update secret
@@ -19,7 +19,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Not yet supported
 var secretUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "update secret",

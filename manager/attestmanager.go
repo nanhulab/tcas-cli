@@ -1,11 +1,11 @@
 /*
- * @Author: jffan
- * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-15 16:23:48
+* @Author: jffan
+* @Date: 2024-07-31 15:01:17
+ * @LastEditTime: 2024-08-20 15:10:06
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\attestmanager.go
- * @Description: Request encapsulation
- */
+* @Description: Request encapsulation
+*/
 package manager
 
 import (
@@ -180,7 +180,7 @@ func (m *Manager) UpdateSecret(id, encodeJsonData string) (*SecretSetResponse, e
 		return nil, fmt.Errorf("request update secret api failed, error: %s ", err)
 	}
 
-	return nil, nil
+	return res, nil
 }
 func (m *Manager) ListSecret() (*SecretListResponse, error) {
 	client := m.newClient("get", SecretListUrl)
@@ -323,6 +323,34 @@ func (m *Manager) AttestForToken(tee, runtimedata, devices, policies string) (*T
 	return tokenRes, nil
 }
 
+func (m *Manager) AttestForCert(tee, eccpemBase64key, devices, policies string, csr *CertCsrInfoReq) (*AttestCertResponse, error) {
+	attestReq, err := m.getNodeAttestInfo(tee, eccpemBase64key, devices, policies)
+	if err != nil {
+		return nil, fmt.Errorf("get node cert attestInfo failed, error: %s", err)
+	}
+
+	client := m.newClient("post", AttestCertUrl)
+	req := AttestCertInfoReq{
+		Csr:        csr,
+		AttestInfo: attestReq,
+	}
+	client, err = client.JSONBody(req)
+	if err != nil {
+		return nil, fmt.Errorf("set request body failed, error: %s", err)
+	}
+
+	certRes := new(AttestCertResponse)
+	err = client.ToJSON(certRes)
+	if err != nil {
+		return nil, fmt.Errorf("do request to attest api failed, error: %s", err)
+	}
+
+	if certRes.Code != 200 {
+		return nil, fmt.Errorf("response error: %s", certRes.Message)
+	}
+
+	return certRes, nil
+}
 func X5cToCertPem(x5c []string) (*bytes.Buffer, error) {
 	pemData := new(bytes.Buffer)
 	if x5c != nil && len(x5c) > 0 {
@@ -384,4 +412,31 @@ func PrintFormatToken(token *jwt.Token) error {
 	fmt.Println(consts.ColorYellow + string(jsonClaimsData) + consts.OutReset)
 	fmt.Println("------------------Token Info End--------------------")
 	return nil
+}
+
+func ParseCert(certData interface{}) (*x509.Certificate, error) {
+	var certcontent []byte
+	var err error
+	resultCert := new(x509.Certificate)
+	switch v := certData.(type) {
+	case string:
+		certcontent, err = os.ReadFile(v)
+		if err != nil {
+			return resultCert, fmt.Errorf("read cert file failed, error: %s", err)
+		}
+	case []byte:
+		certcontent = v
+	default:
+		return resultCert, fmt.Errorf("unsupported type: %T", v)
+	}
+	certBlock, _ := pem.Decode(certcontent)
+	logrus.Debugf("certType: %s", certBlock.Type)
+	if certBlock == nil || certBlock.Type != "CERTIFICATE" {
+		return resultCert, fmt.Errorf("Failed to decode PEM block containing certificate")
+	}
+	resultCert, err = x509.ParseCertificate(certBlock.Bytes)
+	if err != nil {
+		return resultCert, fmt.Errorf("Failed to parse cert certificate: %v", err)
+	}
+	return resultCert, nil
 }

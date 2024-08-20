@@ -2,9 +2,10 @@ package attest
 
 import (
 	"fmt"
+	"tcas-cli/manager"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"tcas-cli/manager"
 )
 
 var tokenCmd = &cobra.Command{
@@ -34,7 +35,7 @@ var tokenCmd = &cobra.Command{
 
 func init() {
 	Cmd.AddCommand(tokenCmd)
-	//set parameter for policy set
+	//set parameter for getting token
 	tokenCmd.Flags().StringP("url", "u", "https://api.trustcluster.cn", "optional, tcas's api url")
 	tokenCmd.Flags().StringP("tee", "t", "", "must, tee type")
 	tokenCmd.MarkFlagRequired("tee")

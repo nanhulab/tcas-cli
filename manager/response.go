@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-15 09:27:06
+ * @LastEditTime: 2024-08-19 17:29:03
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\response.go
  * @Description: The type of response params
@@ -97,4 +97,14 @@ type CaSingleResponse struct {
 
 type CaResponse struct {
 	Keys []CaSingleResponse `json:"keys"`
+}
+
+type AttestCertData struct {
+	X5c          []string `json:"x5c"`
+	SerialNumber string   `json:"serial_number"`
+}
+
+type AttestCertResponse struct {
+	HttpBaseResponse
+	Data *AttestCertData `json:"data"`
 }
