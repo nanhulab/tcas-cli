@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-19 17:29:03
+ * @LastEditTime: 2024-08-21 10:46:18
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\response.go
  * @Description: The type of response params
@@ -107,4 +107,9 @@ type AttestCertData struct {
 type AttestCertResponse struct {
 	HttpBaseResponse
 	Data *AttestCertData `json:"data"`
+}
+
+type AttestSecretData struct {
+	HttpBaseResponse
+	Secret interface{} `json:"secret"`
 }

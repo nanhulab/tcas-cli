@@ -1,7 +1,7 @@
 /*
 * @Author: jffan
 * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-20 15:10:06
+ * @LastEditTime: 2024-08-21 15:21:00
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\attestmanager.go
 * @Description: Request encapsulation
@@ -342,15 +342,43 @@ func (m *Manager) AttestForCert(tee, eccpemBase64key, devices, policies string, 
 	certRes := new(AttestCertResponse)
 	err = client.ToJSON(certRes)
 	if err != nil {
-		return nil, fmt.Errorf("do request to attest api failed, error: %s", err)
+		return nil, fmt.Errorf("do request to attest cert api failed, error: %s", err)
 	}
 
 	if certRes.Code != 200 {
-		return nil, fmt.Errorf("response error: %s", certRes.Message)
+		return nil, fmt.Errorf("attest cert response error: %s", certRes.Message)
 	}
 
 	return certRes, nil
 }
+
+func (m *Manager) AttestForSecret(tee, runtimedata, devices, policies, secretID string) (*AttestSecretData, error) {
+	if secretID == "" {
+		return nil, fmt.Errorf("secret id is null")
+	}
+	attestReq, err := m.getNodeAttestInfo(tee, runtimedata, devices, policies)
+	if err != nil {
+		return nil, fmt.Errorf("get node cert attestInfo failed, error: %s", err)
+	}
+	client := m.newClient("post", AttestSecretUrl)
+	client.Header("SecretId", secretID)
+	client, err = client.JSONBody(attestReq)
+	if err != nil {
+		return nil, fmt.Errorf("set request body failed, error: %s", err)
+	}
+	secretRes := new(AttestSecretData)
+	err = client.ToJSON(secretRes)
+	if err != nil {
+		return nil, fmt.Errorf("do request to attest secert api failed, error: %s", err)
+	}
+
+	if secretRes.Code != 200 {
+		return nil, fmt.Errorf("attest secert response error: %s", secretRes.Message)
+	}
+
+	return secretRes, nil
+}
+
 func X5cToCertPem(x5c []string) (*bytes.Buffer, error) {
 	pemData := new(bytes.Buffer)
 	if x5c != nil && len(x5c) > 0 {

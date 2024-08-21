@@ -1,7 +1,7 @@
 /*
  * @Author: jffan
  * @Date: 2024-07-31 15:01:17
- * @LastEditTime: 2024-08-16 15:35:24
+ * @LastEditTime: 2024-08-21 10:33:18
  * @LastEditors: jffan
  * @FilePath: \gitee-tcas\manager\urls.go
  * @Description: Define the constant for the request
@@ -18,4 +18,5 @@ const (
 	AttestUrl         = "/v1/attest"
 	CaUrl             = "/v1/pki/ca"
 	AttestCertUrl     = "/v1/attest/getcert"
+	AttestSecretUrl   = "/v1/attest/getsecret"
 )

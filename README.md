@@ -161,12 +161,14 @@ successful response:
 
 ### 3.2 get secret 
 ```shell
-./tcasctl attest secret -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids> -v <trust-devices>
+./tcasctl attest secret -u <url>  -t <tee> -d <base64 encoded userdata> -p <policy ids> -v <trust-devices> -s <secretid> -o <output dir> 
 ```
 + `-t`: must, the type of tee, now support csv or virtcca
++ `-s`: must,the secret ID that needs to be obtained
 + `-d`: optional, the base64 encoded userdata
 + `-p`: optional, the ids of the policy needed matching 
 + `-v`: optional, the trust devices
++ `-o`:optional, the output dir of the secret,default is ./tcas-secret
 
 successful response:
 ```shell
@@ -184,7 +186,7 @@ successful response:
 + `-c`: must, the cert's common_name 
 + `-e`: optional, the cert's expiration time, default: 10 years
 + `-i`: optional, the cert's IP addresses extensions
-+ `-o`：optional, the output dir of the cert and keys, default: ./
++ `-o`：optional, the output dir of the cert and keys, default: ./tcas-certs
 
 successful response:
 ```shell
