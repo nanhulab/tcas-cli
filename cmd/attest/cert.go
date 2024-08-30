@@ -18,6 +18,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"github.com/nanhulab/tcas-cli/utils/file"
 	"net"
 	"os"
@@ -90,7 +91,7 @@ var certCmd = &cobra.Command{
 			Expiration:  years,
 			IPAddresses: ipStrings,
 		}
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			logrus.Errorf("create get cert manager failed, error: %s", err)
 			return

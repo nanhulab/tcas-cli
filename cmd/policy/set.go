@@ -12,6 +12,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"github.com/nanhulab/tcas-cli/utils/file"
 	"github.com/nanhulab/tcas-cli/utils/tools"
 
@@ -53,7 +54,7 @@ var policySetCmd = &cobra.Command{
 		attestationType, _ := cmd.Flags().GetString("type")
 		logrus.Debugf("policy set type:" + consts.ColorYellow + attestationType + consts.OutReset)
 
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
 			return

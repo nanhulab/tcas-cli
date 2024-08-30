@@ -3,6 +3,7 @@ package attest
 import (
 	"fmt"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -19,7 +20,7 @@ var tokenCmd = &cobra.Command{
 		userdata, _ := cmd.Flags().GetString("userdata")
 		policies, _ := cmd.Flags().GetString("policies")
 
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			return
 		}

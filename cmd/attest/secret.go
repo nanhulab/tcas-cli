@@ -5,6 +5,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"github.com/nanhulab/tcas-cli/utils/file"
 	"github.com/nanhulab/tcas-cli/utils/tools"
 	"os"
@@ -25,7 +26,7 @@ var secretCmd = &cobra.Command{
 		userdata, _ := cmd.Flags().GetString("userdata")
 		policies, _ := cmd.Flags().GetString("policies")
 		secretID, _ := cmd.Flags().GetString("secretId")
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			return
 		}

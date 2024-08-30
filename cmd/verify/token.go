@@ -15,6 +15,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -41,7 +42,7 @@ var verifyTokenCmd = &cobra.Command{
 			//online verify
 			logrus.Debugf(consts.ColorYellow + "Verify Token Online" + consts.OutReset)
 			url, _ := cmd.Flags().GetString("url")
-			m, err := manager.New(url, "")
+			m, err := manager.New(url, "", tees.GetCollectors())
 			if err != nil {
 				logrus.Errorf("create attest manager failed, error: %s", err)
 				return

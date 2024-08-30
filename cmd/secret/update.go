@@ -13,6 +13,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"github.com/nanhulab/tcas-cli/utils/file"
 
 	"github.com/sirupsen/logrus"
@@ -40,7 +41,7 @@ var secretUpdateCmd = &cobra.Command{
 			return
 		}
 		newEncodeJsonData := base64.StdEncoding.EncodeToString(jsonData)
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
 			return

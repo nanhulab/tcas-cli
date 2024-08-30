@@ -13,6 +13,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -29,7 +30,7 @@ var policyListCmd = &cobra.Command{
 		url, _ := cmd.Flags().GetString("url")
 		logrus.Debugf("policy url: " + consts.ColorYellow + url + consts.OutReset)
 
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
 			return

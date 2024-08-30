@@ -12,6 +12,7 @@ import (
 	"fmt"
 	consts "github.com/nanhulab/tcas-cli/constants"
 	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/tees"
 	"github.com/nanhulab/tcas-cli/utils/file"
 	"os"
 	"path/filepath"
@@ -38,7 +39,7 @@ var Cmd = &cobra.Command{
 			return
 		}
 		//getRootCert
-		m, err := manager.New(url, "")
+		m, err := manager.New(url, "", tees.GetCollectors())
 		if err != nil {
 			logrus.Errorf("create attest manager failed, error: %s", err)
 			return

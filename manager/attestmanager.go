@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"github.com/nanhulab/tcas-cli/collectors"
 	consts "github.com/nanhulab/tcas-cli/constants"
-	"github.com/nanhulab/tcas-cli/tees"
 	"os"
 	"strings"
 	"time"
@@ -35,7 +34,7 @@ type Manager struct {
 	Collectors  map[string]collectors.EvidenceCollector
 }
 
-func New(apiEndpoint, caPath string) (*Manager, error) {
+func New(apiEndpoint, caPath string, c map[string]collectors.EvidenceCollector) (*Manager, error) {
 	tc := new(tls.Config)
 	if caPath != "" {
 		certBytes, err := os.ReadFile(caPath)
@@ -52,8 +51,6 @@ func New(apiEndpoint, caPath string) (*Manager, error) {
 	} else {
 		tc.InsecureSkipVerify = true
 	}
-
-	c := tees.GetCollectors()
 
 	return &Manager{
 		APIEndpoint: apiEndpoint,
