@@ -10,8 +10,8 @@ package secret
 
 import (
 	"fmt"
-	consts "tcas-cli/constants"
-	"tcas-cli/manager"
+	consts "github.com/nanhulab/tcas-cli/constants"
+	"github.com/nanhulab/tcas-cli/manager"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

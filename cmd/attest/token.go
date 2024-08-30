@@ -2,7 +2,7 @@ package attest
 
 import (
 	"fmt"
-	"tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/manager"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

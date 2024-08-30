@@ -11,9 +11,9 @@ package verify
 import (
 	"crypto/x509"
 	"fmt"
-	consts "tcas-cli/constants"
-	"tcas-cli/manager"
-	"tcas-cli/utils/file"
+	consts "github.com/nanhulab/tcas-cli/constants"
+	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/utils/file"
 	"time"
 
 	"github.com/sirupsen/logrus"

@@ -13,9 +13,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	consts "github.com/nanhulab/tcas-cli/constants"
+	"github.com/nanhulab/tcas-cli/manager"
 	"strings"
-	consts "tcas-cli/constants"
-	"tcas-cli/manager"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

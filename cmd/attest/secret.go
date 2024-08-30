@@ -3,12 +3,12 @@ package attest
 import (
 	"encoding/json"
 	"fmt"
+	consts "github.com/nanhulab/tcas-cli/constants"
+	"github.com/nanhulab/tcas-cli/manager"
+	"github.com/nanhulab/tcas-cli/utils/file"
+	"github.com/nanhulab/tcas-cli/utils/tools"
 	"os"
 	"path/filepath"
-	consts "tcas-cli/constants"
-	"tcas-cli/manager"
-	"tcas-cli/utils/file"
-	"tcas-cli/utils/tools"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
